@@ -56,10 +56,10 @@ hdfs dfs -rm -R  /user/aluno/jozimar/recover
 ### Encontrar arquivos no hdfs
 hdfs dfs -find /user -name alunos.csv
 
-## Ver inicio do arquivo
+### Ver inicio do arquivo
 hdfs dfs -cat /user/aluno/jozimar/data/escola/alunos.csv | head -n 2
 
-## Checksum
+### Checksum
 hdfs dfs -checksum /user/aluno/jozimar/data/escola/alunos.csv
 
 ## Fator de replicação do arquivo no cluster
