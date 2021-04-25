@@ -1,4 +1,4 @@
-# Execicios bootcamp semantix engenheiro de dados
+# Exercícios bootcamp semantix engenheiro de dados
 
 ## Levantando ambiente de estudo
 
