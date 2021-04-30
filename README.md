@@ -127,6 +127,18 @@ load data inpath '/user/aluno/jozimar/data/populacao/' overwrite into table pop
 select * from pop limit 10;
 select count(1) from pop;
 
+### Tabela particionada
+docker exec -it namenode hdfs dfs -mkdir /user/aluno/jozimar/data/nascimento
+docker exec -it namenode hdfs dfs -ls /
+docker exec -it hive-server bash
+beeline -u jdbc:hive2://localhost:10000
+use jozimar;
+create external table nascimento(nome string, sexo string, frequencia int) partitioned by (ano int) row format delimited fields terminated by ',' lines terminated by '\n' stored as textfile location '/user/aluno/jozimar/data/nascimento';
+
+alter table nascimento add partition(ano=2015)
+
+hdfs dfs -ls /user/aluno/jozimar/data/nascimento
+hdfs dfs -put /input/exercises-data/names/yob2015.txt /user/aluno/jozimar/data/nascimento/ano-2015
 
 ### sair do hive
 ctrl + d
