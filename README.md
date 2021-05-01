@@ -140,5 +140,16 @@ alter table nascimento add partition(ano=2015)
 hdfs dfs -ls /user/aluno/jozimar/data/nascimento
 hdfs dfs -put /input/exercises-data/names/yob2015.txt /user/aluno/jozimar/data/nascimento/ano-2015
 
+### Formato e compressão de arquivos
+create table pop_parquet(zip_code int, total_population int, median_age float, total_males int, total_females int, total_households int, average_household_size float) stored as parquet;
+
+
+insert into pop_parquet select * from pop;
+
+create table pop_parquet_snappy(zip_code int, total_population int, median_age float, total_males int, total_females int, total_households int, average_household_size float) stored as parquet tblproperties('parquet.compress'='SNAPPY');
+
+
+insert into pop_parquet_snappy select * from pop;
+
 ### sair do hive
 ctrl + d
