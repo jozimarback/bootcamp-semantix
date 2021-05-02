@@ -153,3 +153,25 @@ insert into pop_parquet_snappy select * from pop;
 
 ### sair do hive
 ctrl + d
+
+## Sqoop
+
+### importação de dados mysql
+
+### copiar dados para dentro do conteiner
+docker cp input/exercises-data/db-sql/ database:/
+
+docker exec -it database bash
+
+ls /db-sql/
+mysql -h localhost -u root -psecret
+
+### criar base de dados sakila
+cd /db-sql/sakila/
+mysql -h localhost -u root -psecret < sakila-mv-schema.sql
+mysql -h localhost -u root -psecret < sakila-mv-data.sql
+
+### usando sqoop
+docker exec -it namenode bash
+sqoop list-databases --connect jdbc:mysql://database --username root --password secret
+sqoop list-tables --connect jdbc:mysql://database/employees --username root --password secret
