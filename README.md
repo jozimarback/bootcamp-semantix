@@ -179,3 +179,21 @@ sqoop eval --connect jdbc:mysql://database/employees --username root --password 
 sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "insert into departments values('d010','BI')"
 sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "create table benefits(cod int(2)  AUTO_INCREMENT PRIMARY KEY, name varchar(30))"
 sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "insert into benefits values(null,'food vale')"
+
+### importar tabelas
+sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "select * from employees limit 10"
+
+sqoop import --table employees --connect jdbc:mysql://database/employees --username root --password secret --warehouse-dir /user/hive/warehouse/db_test_a
+
+hdfs dfs -ls -h /user/hive/warehouse/db_test_a/employees
+
+sqoop import --table employees --connect jdbc:mysql://database/employees --username root --password secret --where "gender-'M'" --warehouse-dir /user/hive/warehouse/db_test_b
+
+sqoop import --table employees --connect jdbc:mysql://database/employees --username root --password secret --columns "first_name,last_name" --fields-terminated-by '\t' --warehouse-dir /user/hive/warehouse/db_test_c
+
+sqoop import --table employees --connect jdbc:mysql://database/employees --username root --password secret --columns "first_name,last_name" --lines-terminated-by ':' --warehouse-dir /user/hive/warehouse/db_test_c --delete-target-dir
+
+### compressão de arquivo
+sqoop import --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 8 --as-parquetfile --warehouse-dir /user/hive/warehouse/db_test2_4
+
+sqoop import --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 5 --as-parquetfile --warehouse-dir /user/hive/warehouse/db_test2_4 --compress --compression-codec org.apache.hadoop.io.compress.SnappyCodec
