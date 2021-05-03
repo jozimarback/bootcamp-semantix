@@ -196,4 +196,8 @@ sqoop import --table employees --connect jdbc:mysql://database/employees --usern
 ### compressão de arquivo
 sqoop import --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 8 --as-parquetfile --warehouse-dir /user/hive/warehouse/db_test2_4
 
-sqoop import --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 5 --as-parquetfile --warehouse-dir /user/hive/warehouse/db_test2_4 --compress --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+sqoop import --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 5 --as-parquetfile --warehouse-dir /user/hive/warehouse/db_test2_5 --compress --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+
+sqoop import -Dorg.apache.sqoop.splitter.allow_text_splitter=true --table cp_titles_date --connect jdbc:mysql://database/employees --username root --password secret -m 4 --warehouse-dir /user/hive/warehouse/db_test2_title --split-by title
+
+hdfs dfs -ls -h -R /user/hive/warehouse/db_test2_title
