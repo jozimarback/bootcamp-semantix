@@ -201,3 +201,34 @@ sqoop import --table titles --connect jdbc:mysql://database/employees --username
 sqoop import -Dorg.apache.sqoop.splitter.allow_text_splitter=true --table cp_titles_date --connect jdbc:mysql://database/employees --username root --password secret -m 4 --warehouse-dir /user/hive/warehouse/db_test2_title --split-by title
 
 hdfs dfs -ls -h -R /user/hive/warehouse/db_test2_title
+
+### pratica com carga incremental
+docker exec -it database bash
+mysql -psecret
+use sakila;
+show tables;
+create table cp_rental_append select rental_id,rental_date from rental;
+create table cp_rental_id select * from cp_rental_append;
+create table cp_rental_date select * from cp_rental_append;
+
+docker exec -it namenode bash
+
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --table cp_rental_append
+
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --table cp_rental_id
+
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --table cp_rental_date
+
+hdfs dfs -ls -R /user/hive/warehouse/db_test3
+
+docker exec -it database bash
+apt-get update
+apt-get install apt-file
+vi insert_rental.sql
+mysql -psecret < insert_rental.sql
+
+docker exec -it namenode bash
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --append --table cp_rental_append
+sqoop eval --connect jdbc:mysql://database/sakila --username root --password secret --query "select * from cp_rental_append order by rental_id desc limit 5"
+
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --incremental append --table cp_rental_id --check-column rental_id --last-value 16049
