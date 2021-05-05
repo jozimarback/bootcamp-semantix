@@ -247,7 +247,7 @@ sqoop eval --connect jdbc:mysql://database/employees --username root --password 
 sqoop export --table titles --connect jdbc:mysql://database/employees --username root --password secret --hive-table jozimar.titles --export-dir /user/aluno/jozimar/data/titles
 
 
-## Spark
+## Spark Scala
 hdfs dfs -put /input/exercises-data/juros_selic/ /user/aluno/jozimar/data
 
 docker exec -it spark bash
@@ -282,3 +282,28 @@ val jurosHDFS = spark.read.load("hdfs://namenode:8080/user/aluno/jozimar/data/sa
 
 jurosHDFS.printSchema
 jurosHDFS.show(5)
+
+### join
+val alunosDF = spark.read.option("header","true").option("inferSchema","true").csv("/user/aluno/jozimar/data/escola/alunos.csv")
+alunosDF.printSchema
+
+alunosDF.show(3)
+
+alunosDF.write.saveAsTable("jozimar.tab_alunos")#salvar no hive
+
+val cursosDF = spark.read.option("header","true").option("inferSchema","true").csv("/user/aluno/jozimar/data/escola/cursos.csv")
+
+val alunos_cursosDF = alunosDF.join(cursosDF, "id_curso")
+alunos_cursosDF.show(10)
+
+### spark catalog
+spark.catalog.listDatabases.show(false)
+
+spark.catalog.setCurrentDatabase("jozimar")
+
+spark.catalog.listTables.show
+
+spark.catalog.listColumns("tab_alunos").show
+
+spark.read.table("tab_alunos").show(10)
+spark.sql("select * from tab_alunos limit 10")
