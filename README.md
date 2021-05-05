@@ -246,6 +246,58 @@ sqoop eval --connect jdbc:mysql://database/employees --username root --password 
 
 sqoop export --table titles --connect jdbc:mysql://database/employees --username root --password secret --hive-table jozimar.titles --export-dir /user/aluno/jozimar/data/titles
 
+## HBase
+
+docker exec -it hbase-master bash
+
+hbase version
+
+hbase shell
+
+create 'controle',{NAME=>'produto'},{NAME=>'fornecedor'}
+
+put 'controle','1','produto:nome','ram'
+
+put 'controle','2','produto:nome','hd'
+
+put 'controle','3','produto:nome','mouse'
+
+scan 'controle'
+
+put 'controle','1','produto:qtd','100'
+put 'controle','2','produto:qtd','50'
+put 'controle','3','produto:qtd','150'
+
+put 'controle','1','fornecedor:nome','TI Comp'
+put 'controle','2','fornecedor:nome','Peças PC'
+put 'controle','3','fornecedor:nome','Inf Rec'
+
+put 'controle','1','fornecedor:estado','SP'
+put 'controle','2','fornecedor:estado','MG'
+put 'controle','3','fornecedor:estado','SP'
+
+
+describe 'controle'
+
+count 'controle'
+
+alter 'controle',{NAME=>'produto',VERSIONS=>3}
+describe 'controle'
+
+put 'controle','2','produto:qtd','200'
+
+get 'controle','2', {COLUMNS=>['produto:qtd'], VERSION=>2}
+
+help "get"
+
+scan 'controle',{COLUMNS=>'fornecedor:estado', LIMIT => 2}
+scan 'controle',{COLUMNS=>'fornecedor:estado', LIMIT => 5,"ValueFilter(=, 'binary:SP')"}
+
+deleteall 'controle','1'
+deleteall 'controle','3'
+delete 'controle','2','fornecedor:estado'
+
+
 
 ## Spark Scala
 hdfs dfs -put /input/exercises-data/juros_selic/ /user/aluno/jozimar/data
