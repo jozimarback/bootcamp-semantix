@@ -251,3 +251,34 @@ sqoop export --table titles --connect jdbc:mysql://database/employees --username
 hdfs dfs -put /input/exercises-data/juros_selic/ /user/aluno/jozimar/data
 
 docker exec -it spark bash
+
+spark-shell
+
+val jurosDF = spark.read.json("/user/aluno/rodrigo/data/juros_selic/juros_selic.json")
+
+jurosDF.show(5,false)
+
+jurosDF.count()
+### salvar no hive
+val jurosDF10 = jurosDF.where("valor > 10")
+jurosDF10.show()
+jurosDF10.write.saveAsTable("jozimar.tab_juros_selic")
+
+### ler do hive
+val jurosHiveDF = spark.read.table("jozimar.tab_juros_selic")
+jurosHiveDF.printSchema
+
+jurosHiveDF.show(5)
+### salvar no hdfs
+jurosHiveDF.write.parquet("/user/aluno/jozimar/data/save_juros")
+
+docker -it namenode bash
+hdfs dfs -ls /user/aluno/jozimar/data/save_juros
+
+### ler do hdfs
+val jurosHDFS = spark.read.load("/user/aluno/jozimar/data/save_juros")
+ou
+val jurosHDFS = spark.read.load("hdfs://namenode:8080/user/aluno/jozimar/data/save_juros")
+
+jurosHDFS.printSchema
+jurosHDFS.show(5)
