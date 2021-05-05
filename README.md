@@ -245,3 +245,9 @@ sqoop eval --connect jdbc:mysql://database/employees --username root --password 
 sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "select * from titles limit 10"
 
 sqoop export --table titles --connect jdbc:mysql://database/employees --username root --password secret --hive-table jozimar.titles --export-dir /user/aluno/jozimar/data/titles
+
+
+## Spark
+hdfs dfs -put /input/exercises-data/juros_selic/ /user/aluno/jozimar/data
+
+docker exec -it spark bash
