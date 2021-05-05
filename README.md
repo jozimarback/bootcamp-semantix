@@ -232,3 +232,16 @@ sqoop import --connect jdbc:mysql://database/sakila --username root --password s
 sqoop eval --connect jdbc:mysql://database/sakila --username root --password secret --query "select * from cp_rental_append order by rental_id desc limit 5"
 
 sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --incremental append --table cp_rental_id --check-column rental_id --last-value 16049
+
+sqoop import --connect jdbc:mysql://database/sakila --username root --password secret --warehouse-dir /user/hive/warehouse/db_test3 -m 1 --incremental lastmodified --merge-key rental_id --table cp_rental_date --check-column rental_date --last-value '2005-08-23 22:50:12.0'
+
+sqoop import  --table titles --connect jdbc:mysql://database/employees --username root --password secret --warehouse-dir /user/aluno/jozimar/data -m 1
+
+
+sqoop import  --table titles --connect jdbc:mysql://database/employees --username root --password secret -m 1 --hive-import --hive-table jozimar.titles
+
+sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "truncate table titles"
+
+sqoop eval --connect jdbc:mysql://database/employees --username root --password secret --query "select * from titles limit 10"
+
+sqoop export --table titles --connect jdbc:mysql://database/employees --username root --password secret --hive-table jozimar.titles --export-dir /user/aluno/jozimar/data/titles
