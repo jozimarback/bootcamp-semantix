@@ -307,3 +307,15 @@ spark.catalog.listColumns("tab_alunos").show
 
 spark.read.table("tab_alunos").show(10)
 spark.sql("select * from tab_alunos limit 10")
+
+### spark sql queries vs dataframe
+
+spark.sql("select id_discente, nome from tab_alunos limt 5").show
+spark.read.table("tab_alunos").select("id_discente", "nome").limit(5).show
+
+spark.sql("select id_discente, nome, ano_ingresso from tab_alunos where ano_ingresso >= 2018").show
+spark.read.table("tab_alunos").select("id_discente", "nome", "ano_ingresso").where("ano_ingresso>=2018").show
+
+
+spark.sql("select id_discente, nome, ano_ingresso from tab_alunos where ano_ingresso >= 2018 order by nome desc").show
+spark.read.table("tab_alunos").select("id_discente", "nome", "ano_ingresso").where("ano_ingresso>=2018").orderBy($"nome".desc).show
