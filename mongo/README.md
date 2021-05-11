@@ -37,3 +37,10 @@ db.produto.find({quantidade:{$gte:10,$lte: 20}},{nome:1, qtd:1,_id:0})
 db.produto.find({"descricao.conexao":"USB"},{nome:1, qtd:0,_id:0})
 
 db.produto.find({"descricao.so":{$in:["Windows","Windows10"]}})
+
+db.produto.find().sort({nome:1}).pretty()
+
+db.produto.findOne({"descricao.conexao":"USB"})
+db.produto.find({"descricao.conexao":"USB", qtd:{$lt: 25}})
+
+db.produto.find({$or:[{"descricao.conexao":"USB"}, {qtd:{$lt: 25}}]})
