@@ -161,3 +161,7 @@ db.alunos.aggregation([
     {$project: { "id_discente":1,"nivel:1, "curso.id_curso":1, "curso.id_unidade":1, "curso.nome": 1}}
 
 ])
+
+### replicaset
+rs.cof()
+rs.status()
