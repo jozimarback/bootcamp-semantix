@@ -84,3 +84,18 @@ db.teste.updateOne({usuario:"Semantix"},{$currentDate:{data_acesso: {type:"times
 
 db.teste.deleteOne({_id:ObjectId(...)})
 db.teste.drop()
+
+
+### Indices
+
+db.produto.CreateIndex({nome:1},{name:"query_produto"})
+
+db.produto.getIndexes()
+
+db.produto.find.explain()
+
+db.produto.find().hint("nome":1)
+
+db.produto.find().hint("nome":1).explain()
+
+db.produto.dropIndex({nome:1})
