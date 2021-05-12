@@ -113,3 +113,51 @@ db.produto.find({"nome": {$regex: /mem.ria/i })
 db.produto.find({"qtd": {$regex: /[a-z]/ })
 
 db.produto.find({"descricao.sistema": "Windows10" })
+
+
+### Agregação
+
+db.alunos.aggregation([
+    { 
+        $group: {
+            _id: "$ano_ingresso",
+            "nivel_por_ano": { $addToSet:"$nivel"}
+        }
+    }
+])
+
+db.alunos.aggregation([
+    { 
+        $group: {
+            _id: "$id_curso",
+            "qtd_por_curso": { $sum: 1 }
+        }
+    }
+])
+
+db.alunos.aggregation([
+    {$match: { id_curso:1222 }}
+])
+
+db.alunos.aggregation([
+    {$match: { nivel:"M" }}
+])
+
+db.alunos.aggregation([
+    {$match: { nivel:"M" }},
+    { 
+        $group: {
+            _id: "$id_curso",
+            "ultimo_ano": { $max:"$ano_ingresso"}
+        }
+    },
+    {$sort: {"ultimo_ano":-1}},
+    {$limit:5}
+])
+
+
+db.alunos.aggregation([
+    {$lookup: { localField:"id_curso", foreignField:"id_curso", from:"cursos", as "curso"}},
+    {$project: { "id_discente":1,"nivel:1, "curso.id_curso":1, "curso.id_unidade":1, "curso.nome": 1}}
+
+])
