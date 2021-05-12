@@ -99,3 +99,17 @@ db.produto.find().hint("nome":1)
 db.produto.find().hint("nome":1).explain()
 
 db.produto.dropIndex({nome:1})
+
+### Regex
+
+db.produto.find({nome: {$regex: /cpu/ })
+
+db.produto.find({nome: {$regex: /^hd/ }, {nome:1, qtd:1 })
+
+db.produto.find({"descricao.armazenamento": {$regex: /gb/i }, {nome:1, descricao:1 })
+
+db.produto.find({"nome": {$regex: /mem.ria/i })
+
+db.produto.find({"qtd": {$regex: /[a-z]/ })
+
+db.produto.find({"descricao.sistema": "Windows10" })
