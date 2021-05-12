@@ -45,7 +45,7 @@ db.produto.find({"descricao.conexao":"USB", qtd:{$lt: 25}})
 
 db.produto.find({$or:[{"descricao.conexao":"USB"}, {qtd:{$lt: 25}}]})
 
-### update
+### Update
 
 db.produto.updateOne({ _id:1 }, { $set:{nome:'cpu i7'}})
 db.produto.updateOne({ _id:1 }, { $set:{qtd:15}})
@@ -71,3 +71,16 @@ db.produto.updateOne({_id:3, "descricao.sistema": "Windows"},{$set:{"descricao.s
 db.produto.updateOne({_id:4 },{$push:{"descricao.sistema": "Linux"}})
 ##### remover
 db.produto.updateOne({_id:3 },{$pull:{"descricao.sistema": "Mac"}, $currentDate:{ts_modificado:{$type:"timestamp"}}})
+
+### Remover
+
+db.createCollection('tes/te')
+db.teste.insertOne({usuario:''Semantix,data_acesso: new Date()})
+
+db.teste.find(data_acesso: {$gte: Date('2020')}})
+db.teste.find(data_acesso: {$gte: ISODate('2020-01-01')}})
+
+db.teste.updateOne({usuario:"Semantix"},{$currentDate:{data_acesso: {type:"timestamp"}}})
+
+db.teste.deleteOne({_id:ObjectId(...)})
+db.teste.drop()
