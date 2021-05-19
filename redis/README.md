@@ -35,3 +35,27 @@ expire views:qtd 3600
 ttl view:qtd
 ##### setar ao infinito
 persist views:qtd
+
+#### redis listas
+rpush views:ultimo_usuario Joao Ana
+lpush views:ultimo_usuario Carlos
+rpush views:ultimo_usuario Carol
+
+##### recuperar itens da lista
+lrange views:ultimo_usuario 0 -1
+
+lrange views:ultimo_usuario 0 -2
+
+##### tamanho da lista
+llen views:ultimo_usuario
+
+##### redefinir tamanho da lista removendo o primeiro
+ltrim views:ultimo_usuario 1 -1
+
+##### obter primeiro ou ultimo
+lpop views:ultimo_usuario
+rpop views:ultimo_usuario
+
+##### obter primeiro ou ultimo com tempo de espera
+blpop views:ultimo_usuario 5
+brpop views:ultimo_usuario 5
