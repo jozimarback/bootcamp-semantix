@@ -59,3 +59,44 @@ rpop views:ultimo_usuario
 ##### obter primeiro ou ultimo com tempo de espera
 blpop views:ultimo_usuario 5
 brpop views:ultimo_usuario 5
+
+#### redis sets
+##### adicionar
+sadd pesquisa:produto monitor mouse teclado
+sadd pesquisa:desconto 'memoria ram' monitor teclado HD
+##### contar quantidade
+scard pesquisa:produto
+##### listar
+smembers pesquisa:produto
+##### se existe valor
+sismember pesquisa:produto monitor
+##### remover
+srem pesquisa:produto monitor
+spop pesquisa:produto
+##### interseção
+sinter pesquisa:produto pesquisa:desconto
+##### diferença
+sdiff pesquisa:produto pesquisa:desconto
+##### criar a partir de união
+sunionstore pesquisa:produto_desconto pesquisa:produto pesquisa:desconto
+
+
+#### redis sets ordenados
+##### adicionar
+zadd pesquisa:produto 100 monitor 200 HD 10 mouse 50 teclado
+##### contar quantidade
+zcard pesquisa:produto
+
+##### listar menor para maior
+zrange pesquisa:produto 0 -1
+zrank pesquisa:produto 0 -1
+
+##### listar maior para menor
+zrevrank pesquisa:produto 0 -1
+zrevrange pesquisa:produto 0 -1
+
+##### remover um item
+zrem pesquisa:produto HD
+zpopmax pesquisa:produto
+
+
