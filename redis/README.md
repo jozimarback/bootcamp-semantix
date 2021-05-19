@@ -100,3 +100,30 @@ zrem pesquisa:produto HD
 zpopmax pesquisa:produto
 
 
+#### Hash
+hmset usuario:100 nome Augusto estado SP views 10
+
+hgetall
+
+##### contar quantidade de campos
+hlen usuario:100
+
+##### ver multiplos campos
+hmget usuario:100 nome views
+
+##### contar caracteres valor de um campo
+hstrlen usuario:100 nome
+
+##### incrementar
+hincrby usuario:100 views 2
+
+##### vizualizar campos
+hkeys usuario:100
+
+##### visualizar valores
+kvals usuario:100
+
+##### deletar chave
+hdel usuario:100
+
+
