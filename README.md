@@ -3,3 +3,5 @@
 - [Fundamentos](./fundamentos/)
 
 - [MongoDB](./mongo/)
+
+- [redis](./redis/)
