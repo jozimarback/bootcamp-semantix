@@ -126,4 +126,22 @@ kvals usuario:100
 ##### deletar chave
 hdel usuario:100
 
+#### PubSub
+
+##### criar assinante
+subscribe noticias:sp
+psubscribe noticias:*
+
+##### criar publicador
+publish noticias:sp 'Msg 1'
+publish noticias:sp 'Msg 2'
+publish noticias:sp 'Msg 3'
+publish noticias:rj 'Msg 4'
+publish noticias:rj 'Msg 5'
+publish noticias:rj 'Msg 6'
+
+#####  cancelar assinatura
+ctrl+c
+
+
 
