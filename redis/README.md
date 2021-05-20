@@ -144,4 +144,15 @@ publish noticias:rj 'Msg 6'
 ctrl+c
 
 
+#### Ler configuração do servidor
+config get *
 
+config get appendonly
+config set appendonly no
+
+config get save
+config set save '120 500'
+
+config get maxmemory*
+config set maxmemory-policy allkeys-lru
+config set maxmemory 1mb
