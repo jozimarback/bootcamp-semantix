@@ -156,3 +156,7 @@ config set save '120 500'
 config get maxmemory*
 config set maxmemory-policy allkeys-lru
 config set maxmemory 1mb
+
+####links
+[tyr.redis](http://try.redis.io)
+[redis.io/commands](https://redis.io/commands)
