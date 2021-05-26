@@ -64,3 +64,8 @@ kafka-consumer-groups --bootstrap-server localhost:9092 --group <nomegrupo> --re
 kafka-consumer-groups --bootstrap-server localhost:9092 --group <nomegroup> --reset-offsets --shift-by -2 --execute --topic <nometopico>
 
 kafka-consumer-groups --bootstrap-server localhost:9092 --reset-offset --shift-by -2 --execute --topic msg-cli --group app-cli
+
+#### exercicios pós criação tópico pela interface
+kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-rapida
+
+kafka-console-producer --broker-list localhost:9092 --topic msg-rapida
