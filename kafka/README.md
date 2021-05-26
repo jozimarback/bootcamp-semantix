@@ -69,3 +69,45 @@ kafka-consumer-groups --bootstrap-server localhost:9092 --reset-offset --shift-b
 kafka-console-consumer --bootstrap-server localhost:9092 --topic msg-rapida
 
 kafka-console-producer --broker-list localhost:9092 --topic msg-rapida
+
+
+### KSQL
+
+
+#### criando stream
+create stream <nomestream> (<campo> <tipo>,...,<campo><tipo>) with (kafka_topic='<nometopico>', value_format='<formato>', KEY='<campochave>', TIMESTAMP='<campotimestamp>');
+
+Formatos:
+- DEMILIMITED (,CSV)
+- JSON
+- AVRO
+
+Tipo campo:
+- BOOLEAN
+- INTEGER ou INT
+- BIGINT
+- DOUBLE
+- VARCHAR ou STRING
+- Array
+- Map
+- Struct
+
+#### convertendo stream
+create stream cad_avro_csv with(kafka_topic='cadastro-avro', value_format='avro') as select * from cad_str;
+
+#### insert
+insert into stram_name(rowtime, rowkey, key_col, col_a) values (1234, 'key', 'key', 'a');
+
+#### deletar stream
+drop stream <nomestream>;
+
+drop stream if exists <nomestream> delete topic;
+
+### Gerando dados datagen
+
+docker exet -it ksql-datagen bash
+ksql-datagen <argumentos>
+ksql-datagen help
+
+
+ksql-datagen bootstrap-server=broker:29092 schemaRegistryUrl=schema-registry:8081 topic=users quickstart=users
