@@ -7,3 +7,5 @@
 - [Eedis](./redis/)
 
 - [Kafka](./kafka/)
+
+- [Elastic](./elastic/)
