@@ -225,3 +225,61 @@ GET produto/_search
   }
 }
 ```
+
+Ordem busca com operadores
+
+```
+GET produto/_search
+{
+  "query":{
+    "match":{
+      "descricao":{
+        "query": "windows linux",
+        "operator:"and"
+      }
+    }
+  }
+}
+```
+O padrão de busca é operator OR, então quando buscar por algo que deve conter um ou outro não é necesário  informar o operator
+
+```
+GET produto/_search
+{
+  "query":{
+    "match":{
+      "descricao":  "windows linux usb"
+    }
+  }
+}
+```
+
+
+```
+GET produto/_search
+{
+  "query":{
+    "match":{
+      "descricao":{
+        "query": "windows linux usb",
+        "minimum_should_match":2
+      }
+    }
+  }
+}
+```
+
+
+```
+GET produto/_search
+{
+  "query":{
+    "match":{
+      "descricao":{
+        "query": "windows linux usb",
+        "minimum_should_match":"50%"
+      }
+    }
+  }
+}
+```
