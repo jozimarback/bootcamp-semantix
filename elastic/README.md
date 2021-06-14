@@ -34,6 +34,7 @@ POST produto/_update/3
 }
 ```
 
+verificar se existe
 ```
 HEAD produto/_doc/3
 ```
@@ -104,12 +105,12 @@ GET cliente/_close
 GET cliente/_open
 ```
 
-reindex
+ver propriedades/campos de um indice
 
 ```
 GET produto/_mapping
 ```
-
+reindex
 ```
 PUT produto2/_mapping
 {
@@ -278,6 +279,233 @@ GET produto/_search
       "descricao":{
         "query": "windows linux usb",
         "minimum_should_match":"50%"
+      }
+    }
+  }
+}
+```
+
+Range
+```
+GET populacao/_search
+{
+  "query": {
+    "range": {
+      "Total Population":{
+        "lt":100
+      } 
+    }
+  }
+}
+```
+
+```
+GET populacao/_search
+{
+  "query": {
+    "range": {
+      "Median Age":{
+        "gt":70
+      } 
+    }
+  }
+}
+```
+
+```
+GET populacao/_search
+{
+  "size":20,
+  "query": {
+    "range": {
+      "Zip COde":{
+        "get": 90056,
+        "lte": 90067
+      } 
+    }
+  }
+}
+```
+
+
+```
+GET bolsa/_search
+{
+  "query":{
+    "range":{
+      "timestamp":{
+        "gte": "2019-01-01",
+        "lte": "2019-03-01",
+        "format": "yyyy-MM-dd"
+      }
+    }
+  }
+}
+```
+
+
+```
+GET bolsa/_search
+{
+  "query":{
+    "range":{
+      "timestamp":{
+        "gte": "2019-04-01",
+        "lte": "now",
+        "format": "yyyy-MM-dd"
+      }
+    }
+  }
+}
+```
+
+Elastic Analyzer
+
+- [referencia](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html)
+- [exemplo](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer.html)
+
+
+```
+POST _analyze
+{
+  "analyzer": "simple",
+  "text": "O elasticsearch surgiu em 2010"
+}
+```
+
+```
+POST _analyze
+{
+  "analyzer": "brazilian",
+  "text": "O elasticsearch surgiu em 2010"
+}
+```
+
+```
+PUT produto
+{
+  "mappings": {
+    "properties": {
+      "descricao":{
+        "type": "text",
+        "analyzer": "brazilian"
+      }
+    }
+  }
+}
+```
+
+```
+PUT produto1{
+  "settings":{
+    "index": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    }
+  },
+  "mappings":{
+    "properties":{
+      "descricao":{
+        "type": "text",
+        "analyzer": "brazilian"
+      }
+    }
+  }
+}
+```
+
+```
+POST _reindex
+{
+  "source": {
+    "index": "produto"
+  },
+  "dest": {
+    "index": "produto1"
+  }
+}
+```
+
+```
+DELETE produto
+```
+
+```
+POST _reindex
+{
+  "source": {
+    "index": "produto1"
+  },
+  "dest": {
+    "index": "produto"
+  }
+}
+```
+
+Agregações
+
+```
+GET bolsa/_search
+{
+  "size":0,
+  "aggs":{
+    "media":{
+      "avg": {
+        "field": "volume"
+      }
+    }
+  }
+}
+```
+
+
+```
+GET bolsa/_search
+{
+  "size":0,
+  "aggs":{
+    "estatistica":{
+      "stats": {
+        "field": "close"
+      }
+    }
+  }
+}
+```
+
+```
+GET bolsa/_search
+{
+  "query":{
+    "range":{
+      "@timestamp":{
+        "gte":"2019-04-01",
+        "lte":"now"
+      }
+    }
+  },
+  "aggs":{
+    "estatistica":{
+      "stats": {
+        "field": "open"
+      }
+    }
+  }
+}
+```
+
+
+```
+GET bolsa/_search
+{
+  "size":0,
+  "aggs":{
+    "mediana":{
+      "percentiles": {
+        "field": "open",
+        "percents":[
+          1,5,25,50,75,95,99
+        ]
       }
     }
   }
