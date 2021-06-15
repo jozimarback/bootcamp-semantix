@@ -511,3 +511,39 @@ GET bolsa/_search
   }
 }
 ```
+
+```
+GET bolsa/_search
+{
+  "size":0,
+  "aggs":{
+    "doc_anos":{
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "year"
+      }
+    }
+  }
+}
+```
+
+
+```
+GET bolsa/_search
+{
+  "size":0,
+  "aggs":{
+    "qtd_2_anos":{
+      "date_range": {
+        "field": "@timestamp",
+        "ranges": [
+          {
+            "from": "now-2y",
+            "to": "now"
+          }
+        ]
+      }
+    }
+  }
+}
+```
