@@ -153,7 +153,82 @@ hive> create table customers_addr(
 )
 row format delimited
 fields terminated by ','
-collection items terminated by '|'
+collection items terminated by '|';
 
 hive> select name, address.street as home FROM customers_addr;
 ```
+
+SerDe LazySimple
+
+```
+hive> create table people(fname string, lname string)
+row format SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+with serdeproperties('field.delim'='\t');
+```
+
+SerDe Regex
+
+>10309296107596201608290122150akland              CA94618
+
+```
+hive> create table fixed(cust_id int, order_dt string, order_tm string, city string, state, string, n string)
+row format serde 'org.apache.hadoop.hive.serde2.RegexSerDe'
+with serdeproperties("input.regex"="(\\d{7})(\\d{7})(\\d{8})(\\d{6})(.{20})(\\w{2})(\\d{5})");
+```
+
+SerDe OpenCSV
+
+>3,"Bitmoney, Inc.", "bmi@example.com"
+
+```
+create table vendors(id int, name string, email string)
+row format serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde';
+```
+
+
+### analise de frases
+
+```
+hive> SELECT txt FROM phrases WHERE id=12345
+```
+
+>I bought this compiter and I love it. It's super fast.
+
+
+```
+hive> SELECT setences(txt) FROM phrases WHERE id=12345
+```
+
+>[["I" ,"bought" ,"this" ,"compiter" ,"and", "I", "love", "it"], ["It's", "super", "fast"]]
+
+```
+hive> SELECT explode(ngrams(setences(txt)),2,4) FROM phrases WHERE id=12345
+```
+
+>{"ngram":["i","love"],"estfrequency":3.0}
+{"ngram":["it","it's"],"estfrequency":2.0}
+
+### plano de executação
+>hive explain select * from user;
+
+>impala> select * from user;
+>impala> profile;
+
+Explain no impala
+
+
+| Valor  | Nome      | Descrição                                                  |
+| ------ | --------- | ---------------------------------------------------------- |
+| 0      | MINIMAL   | Util para validacao de sequencia de join em queries longas |
+| 1      | STANDARD  | Mostra o caminho logico  de trabalho (defaul)              |
+| 2      | EXTENDED  | Detalha como é o plano usando estatistica                  |
+| 3      | VERBOSE   | Primariamente usado por desenvolvedores impala             |
+
+impala> SET EXPLAIN_LEVEL=0;
+impala> EXPLAIN SELECT COUNT(o.order_id) FROM orders o JOIN order_details d ON (o.order_id = d.order_id) WHERE YEAR(o.order_date) = 2008;
+
+hive spark
+
+>hive>SET hive.execution.engine=mr;
+
+>hive>SET hive.execution.engine=spark;

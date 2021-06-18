@@ -2,6 +2,12 @@
 
 ## Elastic
 
+Antes de iniciar o container é necessário alterar a configuração do seu docker desktop:
+
+1) wsl -d docker-desktop
+2) sysctl -w vm.max_map_count=262144
+
+
 ### Iniciando o docker
 >docker pull docker.elastic.co/elasticsearch/elasticsearch:7.9.2
 
