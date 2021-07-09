@@ -4,7 +4,7 @@
 
 - [MongoDB](./mongo/)
 
-- [Eedis](./redis/)
+- [Redis](./redis/)
 
 - [Kafka](./kafka/)
 
