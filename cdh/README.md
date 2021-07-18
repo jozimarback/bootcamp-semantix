@@ -40,6 +40,8 @@
 #### criar pasta hdfs
 >hdfs dfs -mkdir /user/jozimar
 
+>hdfs dfs -mkdir /user/jozimar/data
+
 
 
 
@@ -50,12 +52,22 @@
 
 ### comandos
 
-#### olhar hdsf
+#### Exercicio hdsf
 ```
 $> hdfs dfs -ls /user/jozimar/data
 ```
 
+>  hdfs dfs -put /home/input/populacaoLA/populacaoLA.csv  /user/jozimar/data/
+
+> hdfs dfs -put /home/input/populacaoLA/populacaoLA.csv  /user/jozimar/data/
+
+
 #### Criar tabela hive
+> create database jozimar;
+
+> use jozimar;
+
+
 ```
 hive> create table pop(
     zip_cod int,
@@ -68,7 +80,7 @@ hive> create table pop(
 )
 row format delimited
 fields terminated by ','
-lines terminated by '\'
+lines terminated by '\n'
 stored as textfile
 tblproperties("skip.header.line.count"="1");
 ```
