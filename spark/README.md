@@ -26,5 +26,16 @@ docker-compose –f docker-compose-parcial.yml up -d
 http://localhost:8889
 
 
-### 
+### Spark com Kafka
+
+> docker exec -it kafka bash
+
+> kafka-topics --bootstrap-server kafka:9092 --topic topicTeste --create --partitions 1 --replication-factor 1 
+
+>kafka-console-consumer --boostrap-server kafka:9092 --topic topicTeste
+
+>kafka-console-producer --broker-list kafka:9092 --topic topicTeste --property parse.key=true --property key.separator=,
+
+#### iniciando no shell
+>spark-shell --packages org.apache.spark:spark-streaming-kafka-0-10_2.11:2.4.1
 
