@@ -209,6 +209,57 @@ locations '/user/jozimar/data/nascimento'
 >hive> create table pop_avro_separado stored as avro tblproperties('avro.schema.literal'='{"name":"pop","type":"record","fields":[{"name":"zip_cod","type":"int"},{"name":"total_population","type":"int"}]}') as select * from pop_parquet;
 ```
 
+### joins
+
+>hdfs dfs -cat /user/jozimar/data/escola/alunos/alunos.csv | head -n 3
+
+```
+>hive> create external table alunos_ext(
+    id_discente int,
+    nome string,
+    ano_ingresso int,
+    periodo_ingresso string,
+    nivel string,
+    id_forma int,
+    id_forma_ingresso int,
+    id_curso int
+)
+row format delimited 
+fields terminated by ','
+stored as textfile
+location '/user/jozimar/data/escola/alunos/'
+tblproperties('skip.header.line.count'='1');
+```
+
+```
+>hive> create external table cursos_ext(
+    id_curso int,
+    id_unidade int,
+    codigo string,
+    nome string,
+    id_modalidade_educacao int,
+    nivel string,
+    id_municipio int,
+    id_tipo_oferta_curso int,
+    id_area_curso int,
+    id_grau_academico int,
+    id_eixo_conhecimento int,
+    ativo string
+)
+row format delimited 
+fields terminated by ','
+stored as textfile
+location '/user/jozimar/data/escola/cursos/'
+tblproperties('skip.header.line.count'='1');
+```
+
+```
+>hive>select a.id_discente, a.nivel, a.id_curso, c.id_unidade, c.nome
+from anulos_ext a
+join cursos_ext c on (a.id_curso = c.id_curso)
+limit 5
+```
+
 ### criar tabela com map ou struct
 
 Exemplo de dados
