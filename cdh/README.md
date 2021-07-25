@@ -113,6 +113,10 @@ hive> create table pop_resumo as select zip_cod, total_population, median_age fr
 $ hdfs dfs -tail /user/hive/warehouse/rodrigo.db/pop_resumo/000000_0
 ```
 
+> create table pop_resumo as select zip_cod, total_population, median_age from pop
+
+> insert overwrite directory '/user/jozimar/tab_pop_resumo' row format delimited fields terminated by '\b' select * from pop_resumo;
+
 criar tabela externa
 ```
 hive> create external table nascimento(
@@ -128,6 +132,81 @@ stored as textfile
 location '/user/jozimar/data/nascimento';
 
 hive> alter table nascimento add partition(ano=2015);
+```
+
+### partition e buckets
+Para perfoamnce em campos classificadores utilizar particionamento.
+Para perfomance em campos numericos utilizar buckets
+
+para criar buckets automaticamente
+
+>hive> SET hive.enforce.bucketing=true
+
+patição dinamica
+
+>hive> insert overwrite table user_cidade partition(cidade) select * from user;
+
+mostrar partições
+
+>hive> show partitions user;
+
+alterar nome da partição
+
+>hive> alter table user partition city rename to partition state;
+
+excluir partição
+
+>hive> alter table user drop partition (city='SP');
+
+reparar tabela sincronizando tabela com metastore quando não encontrar partição
+
+>msck repair table <nome_tabela>
+
+### exercicio
+
+> hdfs dfs -mkdir /user/jozimar/data/nascimento
+
+```
+>hive> create external table nascimento(
+    nome string,
+    sexo string,
+    frequencia int
+)
+partitioned by (ano int)
+row format delimited
+fields terminated by ','
+line terminated by '\n'
+stored as textfile
+locations '/user/jozimar/data/nascimento'
+```
+
+>hive> alter table nascimento add partition(ano=2015);
+
+>hdfs dfs -put /home/input/data/names/yob2015.txt /user/jozimar/data/nascimento/ano=2015
+
+>hive> alter table nascimento add partition(ano=2016);
+
+>hive> alter table nascimento add partition(ano=2017);
+
+>hdfs dfs -put /home/input/data/names/yob2016.txt /user/jozimar/data/nascimento/ano=2016
+
+>hdfs dfs -put /home/input/data/names/yob2017.txt /user/jozimar/data/nascimento/ano=2017
+
+### formato de arquivos
+
+```
+>hive> create table pop_parquet stored as parquet as select * from pop;
+```
+
+```
+>hive> create table pop_parquet_snappy stored as parquet tblproperties('parquet.compress'='snappy') as select * from pop;
+```
+
+> hdfs dfs -ls -h -R /user/hive/warehouse/jozimar.db
+
+
+```
+>hive> create table pop_avro_separado stored as avro tblproperties('avro.schema.literal'='{"name":"pop","type":"record","fields":[{"name":"zip_cod","type":"int"},{"name":"total_population","type":"int"}]}') as select * from pop_parquet;
 ```
 
 ### criar tabela com map ou struct
